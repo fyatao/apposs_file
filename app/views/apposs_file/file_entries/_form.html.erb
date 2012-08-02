@@ -1,0 +1,22 @@
+<%= form_for resource, :remote => true do |f| %>
+  <dl class="dl-horizontal">
+    <dt>来源类型</dt>
+    <dd>
+    <label><%=f.radio_button(:refer_type, "svn") %> svn </label>
+    <label><%=f.radio_button(:refer_type, "git") %> git </label>
+    </dd>
+    <dt>来源地址</dt>
+    <dd><%=f.text_field :refer_url %></dd>
+    <dt>线上路径</dt>
+    <dd><%=f.text_field :path %></dd>
+    <dt>使用软连接</dt>
+    <dd title="如果勾选，则系统将创建一个新文件夹，然后让目标文件夹指向新文件夹"><%=f.check_box :linkable %></dd>
+    <%=f.hidden_field :app_id %>
+    <dt><%=f.submit '创建' %></dt>
+    <dd>
+    <input type="reset" value="取消"
+    onclick="$('#file_entries .form').fadeOut(100);" />
+    </dd>
+
+  </dl>
+<%  end %>

@@ -1,0 +1,13 @@
+.bundle/
+log/*.log
+tags
+pkg/
+*.gz
+*.swp
+test/dummy/db/*.sqlite3
+test/dummy/db/schema.rb
+test/dummy/log/*.log
+test/dummy/tmp/
+test/dummy/.sass-cache
+test/dummy/public/assets
+test/dummy/public/apposs_file

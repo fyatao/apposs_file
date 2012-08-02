@@ -1,0 +1,5 @@
+msg("创建失败：<%=@resource.errors.messages.map do |column,messages| 
+  messages.map do |message|
+    "#{@resource.class.human_attribute_name column}#{message}"
+  end
+end.join(", ")%> ");

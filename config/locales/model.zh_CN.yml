@@ -1,0 +1,9 @@
+zh-CN:
+  activerecord:
+    models:
+      apposs_file/file_entry: '文件同步项'
+    attributes:
+      apposs_file/file_entry:
+        path: '来源地址'
+        refer_url: '线上路径'
+        refer_type: '来源类型'

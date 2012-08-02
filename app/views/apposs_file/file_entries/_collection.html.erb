@@ -1,0 +1,28 @@
+<div id="file_entries">
+  <h4 class="well" style="text-align:center">
+    文件同步列表
+    <%=link_to '新建', new_file_entry_path(app_id: parent_id), remote: true %>
+  </h4>
+  <hr />
+  <div class="form"></div>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>类型</th>
+        <th>来源地址</th>
+        <th>线上路径</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% collection.each do |entry| %>
+        <tr> 
+          <td><%=entry.refer_type %></td>
+          <td><%=entry.refer_url %></td>
+          <td><%=entry.path %></td>
+          <td><%=link_to '删除', entry, method: :delete, remote: true, confirm: '提示：执行删除将同时删除相关的操作和指令。是否确实要删除？' %></td>
+        </tr>
+      <% end %>
+    </tbody> 
+  </table>
+</div>
