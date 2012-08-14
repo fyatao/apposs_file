@@ -6,10 +6,11 @@ module AppossFile
           [ "git clone #{refer_url} target" ]
         end
 
-        def pre_scripts refer_url
+        def pre_scripts refer_url, download_folder
           [
-            "rm -rf target.tgz && cd target && git pull",
-            "cd target && tar cz . --exclude=.git -f ../target.tgz"
+            "rm -rf #{download_folder}/target.tgz",
+            "cd target && git pull",
+            "cd target && tar cz . --exclude=.git -f #{download_folder}/target.tgz",
           ]
         end
       end

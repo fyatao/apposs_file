@@ -10,11 +10,12 @@ module AppossFile
     belongs_to :directive_template
     belongs_to :operation_template
 
-    after_create  :init_resource
-    after_destroy :clean_resource
+    after_create  :init
+    after_destroy :clean
 
-    def basedir;    "/apposs_file/#{app_id}/#{id}"   end
-    def full_path;  "#{Rails.root}/public#{basedir}" end
+    def private_folder;  "#{app.private_folder}/#{id}" end
+    def public_folder;  "#{app.public_folder}/#{id}" end
+    def download_folder;  "#{app.download_folder}/#{id}" end
 
     def worker
       case refer_type
@@ -25,15 +26,8 @@ module AppossFile
       end
     end
 
-    def init_resource
-      FileUtils.mkdir_p full_path
-      
-      Dir.chdir full_path do
-        worker.init_scripts(refer_url).each do |script|
-          Rails.logger.info `#{script}`
-        end
-      end if worker.respond_to? :init_scripts
-      
+    def init
+      build_resource
       directive_template, operation_template = make_command
       self.update_attributes(
         :directive_template_id => directive_template.id,
@@ -41,15 +35,15 @@ module AppossFile
       )
     end
 
-    def clean_resource
-      FileUtils.rm_rf full_path
+    def clean
+      clean_resource
       operation_template.delete if operation_template
       directive_template.delete if directive_template
     end
 
     def pre_action
-      Dir.chdir full_path do
-        worker.pre_scripts(refer_url).each do |script|
+      Dir.chdir private_folder do
+        worker.pre_scripts(refer_url, public_folder ).each do |script|
           Rails.logger.info `#{script}`
         end
       end
@@ -57,14 +51,14 @@ module AppossFile
     
     def make_command
       app.make_command(
-        "sync #{File.basename refer_url}##{id}",
-        command(basedir,path,linkable),
+        "sync #{File.basename refer_url}/#{id}",
+        command,
         "AppossFile::FileEntry.find(#{id}).pre_action"
       )
     end
 
-    def command basedir,path,linkable
-      url = "#{Rails.configuration.base_url}/#{basedir}/target.tgz"
+    def command
+      url = "#{download_folder}/target.tgz"
       if linkable
         [
           "export now=`date +%Y-%m-%d_%H-%M-%S`",
@@ -87,6 +81,22 @@ module AppossFile
           "rm target.tgz"
         ].join(' && ')
       end
+    end
+
+    def build_resource
+      FileUtils.mkdir_p private_folder
+      FileUtils.mkdir_p public_folder
+      
+      Dir.chdir private_folder do
+        worker.init_scripts(refer_url).each do |script|
+          Rails.logger.info `#{script}`
+        end
+      end if worker.respond_to? :init_scripts
+    end
+
+    def clean_resource
+      FileUtils.rm_rf private_folder
+      FileUtils.rm_rf public_folder
     end
 
     attr_accessible :refer_url, :refer_type, :path, :linkable

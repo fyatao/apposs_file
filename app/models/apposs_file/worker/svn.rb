@@ -3,10 +3,13 @@ module AppossFile
     module Svn
       class << self
 
-        def pre_scripts refer_url
+        def pre_scripts refer_url, download_folder
           [
-            "rm -rf target* && svn export #{refer_url} target",
-            "cd target && tar cz . -f ../target.tgz && cd .. && rm -rf target"
+            "rm -rf target",
+            "rm -rf #{download_folder}/target.tgz",
+            "svn export #{refer_url} target",
+            "cd target && tar cz . -f #{download_folder}/target.tgz",
+            "rm -rf target"
           ]
         end
 

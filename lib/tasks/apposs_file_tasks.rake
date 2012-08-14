@@ -5,6 +5,16 @@
 # end
 #
 namespace "apposs_file" do
+
+  desc "更新文件同步任务，使用新的脚本"
+  task :update_command => :environment do
+    AppossFile::FileEntry.find_each do |entry|
+      entry.clean_resource
+      entry.build_resource
+      entry.directive_template.update_attribute(:name, entry.command)
+    end
+  end
+
   desc "更新文件同步项，补充关联外键"
   task :fulfill_referer => :environment do
     AppossFile::FileEntry.find_each do |entry|

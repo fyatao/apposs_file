@@ -4,6 +4,14 @@ class App < ActiveRecord::Base
   scope :reals, order(:name) # 添加一个空的 scope 
   has_many :operation_templates
 
+  def public_folder
+    "/public/data/#{id}"
+  end
+
+  def private_folder
+    "/private/data/#{id}"
+  end
+
   def make_command title, command, begin_script
     directive_template = DirectiveTemplate.create!(
       :alias    => title,
