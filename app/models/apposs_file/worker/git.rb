@@ -9,7 +9,7 @@ module AppossFile
         def pre_scripts refer_url, download_folder
           [
             "rm -rf #{download_folder}/target.tgz",
-            "cd target && git pull",
+            "cd target && git fetch origin && git reset --hard origin/master",
             "cd target && tar cz . --exclude=.git -f #{download_folder}/target.tgz",
           ]
         end
