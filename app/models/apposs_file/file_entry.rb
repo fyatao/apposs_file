@@ -15,7 +15,7 @@ module AppossFile
 
     def private_folder;  "#{app.private_folder}/#{id}" end
     def public_folder;  "#{app.public_folder}/#{id}" end
-    def download_folder;  "#{app.download_folder}/#{id}" end
+    def download_url;  "#{app.download_url}/#{id}" end
 
     def worker
       case refer_type
@@ -58,7 +58,7 @@ module AppossFile
     end
 
     def command
-      url = "#{download_folder}/target.tgz"
+      url = "#{download_url}/target.tgz"
       if linkable
         [
           "export now=`date +%Y-%m-%d_%H-%M-%S`",
